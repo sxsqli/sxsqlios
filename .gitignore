@@ -1,4 +1,10 @@
 **/*.bin
 **/*.img
+*.d
+*.o
+kernel.asm
+kernel.out
+kernel/kernel
 mbr
-other/
+_other/
+.vscode/
