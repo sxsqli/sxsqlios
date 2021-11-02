@@ -2,21 +2,21 @@ kernel_dir=kernel
 
 all:run
 
-asm:mbr.asm
+mbr:mbr.asm
 	nasm -o mbr mbr.asm
 
-img:asm
+img:mbr
 	dd if=mbr of=sxsqlios.img count=1 bs=512
 	dd if=/dev/zero of=sxsqlios.img bs=512 seek=1 skip=1 count=2879
 
 .PHONY: kernel
 kernel:
-	cd $(kernel_dir) && make addr=0xc400 $@
+	cd $(kernel_dir) && make clean && make $@
 
 copy:img kernel
 	mkdir -p /tmp/floppy
-	sudo mount sxsqlios.img /tmp/floppy
-	sudo cp $(kernel_dir)/kernel /tmp/floppy
+	-sudo mount sxsqlios.img /tmp/floppy
+	-sudo cp $(kernel_dir)/kernel /tmp/floppy
 	sudo umount /tmp/floppy
 
 run:copy
