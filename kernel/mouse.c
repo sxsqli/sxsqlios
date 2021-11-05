@@ -34,15 +34,6 @@ void init_keyboard(void)
 	return;
 }
 
-/*
-void enable_mouse(void){
-	wait_KBC_sendready();
-	outb(PORT_KEYCMD, KEYCMD_SENDTO_MOUSE);
-	wait_KBC_sendready();
-	outb(PORT_KEYDAT, MOUSECMD_ENABLE);
-	return;
-}
-*/
 void enable_mouse(struct MOUSE_DEC *mdec)
 {
 	wait_KBC_sendready();

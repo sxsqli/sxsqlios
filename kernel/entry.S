@@ -144,7 +144,7 @@ seta20.2:
     # Jump to next instruction, but in 32-bit code segment.
     # Switches processor into 32-bit mode.  这一个跳转的意义重大
     # jmp     protcseg
-    ljmp    $(3*8),$protcseg # 32位的跳转指令。 ljmp selector,offset
+    ljmp    $(4*8),$protcseg # 32位的跳转指令。 ljmp selector,offset
 
     # ######################################################################
     # 正式进入32位的保护模式。
@@ -188,7 +188,7 @@ all:
     call    memcpy
   
   
-  # 下面的这部分不明白，先不管了   这 一部分还真有可能是bootpack的头文件。  这一部分是小日本自己写的一个header,用了小日本自己的工具，所以我没有要这个header
+  # 下面的这部分不明白，先不管了   这 一部分还真有可能是bootpack的头文件
   # movl $BOTPAK ,%ebx  ；ebx=0x280000
   # movl 16(%ebx),%ecx    ecx= int (*0x280010) 跳过16个字节
   # addl  $3     ,%ecx    ecx=ecx+3
@@ -199,6 +199,8 @@ all:
   # movl 12(%ebx),%edi
   # call memcpy  
   
+#    movw    $(3*8),%ax
+#    movw    %ax,%ds
     ljmp    $(2*8),$0x0000
 
 
@@ -216,12 +218,13 @@ memcpy:
 gdt:
     .word   0x0000,0x0000,0x0000,0x0000  # null seg  0
     .word   0xffff,0x0000,0x9200,0x00cf  # data selector 1
-    .word   0xffff,0x0000,0x9a28,0x0047  # c code        3
-    .word   0xffff,0x0000,0x9a00,0x0047  # entry code    2
+    .word   0xffff,0x0000,0x9a28,0x0047  # c code        2
+    .word   0xffff,0x0000,0x9200,0x00cf  # data selector 3
+    .word   0xffff,0x0000,0x9a00,0x0047  # entry code    4
     .word   0x00
   
 gdtdesc:
-    .word   31         # 4*8-1                 # sizeof(gdt) - 1
+    .word   39         # 5*8-1                 # sizeof(gdt) - 1
     .long   gdt                             # address gdt
 
 .p2align 4                              # force 16 byte alignment

@@ -37,11 +37,11 @@ void bootmain(void)
 	fifo8_init(&keyfifo, 32, keybuf);
 	fifo8_init(&mousefifo, 128, mousebuf);
 
-	init_gdtidt();
-	init_pic();
-
 	init_palette();
 	init_screen8(binfo->vram, binfo->scrnx, binfo->scrny);
+
+	init_gdtidt();
+	init_pic();
 
 	for (int y = 0; y < 19; y++)
 	{
@@ -59,13 +59,13 @@ void bootmain(void)
 	init_keyboard();
 	enable_mouse(&mdec);
 
+	sprintf(s, "(%d,%d)", mx, my);
+	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, s);
+
 	memtotal = memtest(0x00400000, 0xbfffffff);
 	memman_init(memman);
 	memman_free(memman, 0x00001000, 0x0009e000);
 	memman_free(memman, 0x00400000, memtotal - 0x00400000);
-
-	sprintf(s, "(%d,%d)", mx, my);
-	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, s);
 
 	sprintf(s, "memory %dMB free: %dKB", memtotal / (1024 * 1024), memman_total(memman) / 1024);
 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 32, COL8_FFFFFF, s);

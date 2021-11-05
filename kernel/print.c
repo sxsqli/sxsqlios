@@ -3,13 +3,6 @@
 
 extern char hankaku[2048];
 
-void printdebug(int i, int x)
-{
-	char font[30];
-	sprintf(font, "Debug:var=%x", i);
-	puts8((char *)VRAM, 320, x, 150, 1, font);
-}
-
 void puts8(char *vram, int xsize, int x, int y, char color, char *font)
 {
 	while (*font)

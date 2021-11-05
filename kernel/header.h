@@ -24,7 +24,6 @@
 #define COL8_008484 14
 #define COL8_848484 15
 
-#define VRAM (0xa0000 - 0x280000)
 #define ADR_BOOTINFO 0x00000FF0
 
 #define PIC0_ICW1 0x0020

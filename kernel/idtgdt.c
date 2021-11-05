@@ -1,4 +1,3 @@
-#include <x86.h>
 #include <header.h>
 
 void set_segmdesc(struct SEGMENT_DESCRIPTOR *sd, unsigned int limit, int base, int ar)
@@ -40,6 +39,7 @@ void init_gdtidt(void)
 	}
 	set_segmdesc(gdt + 1, 0xffffffff, 0x00000000, 0x4092);
 	set_segmdesc(gdt + 2, 0x000fffff, 0x00280000, 0x409a);
+	set_segmdesc(gdt + 3, 0x000fffff, 0x00280000, 0x4092);
 	load_gdtr(0xffff, 0x00270000);
 
 	// idt initialize
