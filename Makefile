@@ -20,7 +20,7 @@ copy:img kernel
 	sudo umount /tmp/floppy
 
 run:copy
-	qemu-system-i386 -drive file=sxsqlios.img,if=floppy
+	qemu-system-i386 -drive file=sxsqlios.img,format=raw,if=floppy
 
 clean:
 	@echo "cleanning project"

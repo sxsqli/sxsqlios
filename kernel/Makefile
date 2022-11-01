@@ -14,7 +14,7 @@ entry_objs = entry.o
 ccode_objs = main.o screen.o font.o print.o idtgdt.o int.o asmint32.o fifo.o mouse.o memory.o
 CFLAGS := $(CFLAGS) -O0 -fno-builtin -I$(OBJDIR) -MD
 CFLAGS += -fno-omit-frame-pointer
-CFLAGS += -Wall -Wno-format -Wno-unused -gstabs -m32 -fno-stack-protector
+CFLAGS += -Wall -Wno-format -Wno-unused -ggdb -m32 -fno-stack-protector
 LDFLAGS = -m elf_i386
 
 %.o:%.c

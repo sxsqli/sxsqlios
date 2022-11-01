@@ -144,7 +144,7 @@ seta20.2:
     # Jump to next instruction, but in 32-bit code segment.
     # Switches processor into 32-bit mode.  这一个跳转的意义重大
     # jmp     protcseg
-    ljmp    $(4*8),$protcseg # 32位的跳转指令。 ljmp selector,offset
+    ljmp    $(2*8),$protcseg # 32位的跳转指令。 ljmp selector,offset
 
     # ######################################################################
     # 正式进入32位的保护模式。
@@ -201,7 +201,7 @@ all:
   
 #    movw    $(3*8),%ax
 #    movw    %ax,%ds
-    ljmp    $(2*8),$0x0000
+    ljmp    $(2*8),$0x00280000
 
 
 memcpy:
@@ -218,13 +218,11 @@ memcpy:
 gdt:
     .word   0x0000,0x0000,0x0000,0x0000  # null seg  0
     .word   0xffff,0x0000,0x9200,0x00cf  # data selector 1
-    .word   0xffff,0x0000,0x9a28,0x0047  # c code        2
-    .word   0xffff,0x0000,0x9200,0x00cf  # data selector 3
-    .word   0xffff,0x0000,0x9a00,0x0047  # entry code    4
+    .word   0xffff,0x0000,0x9a00,0x00cf  # c code        2
     .word   0x00
   
 gdtdesc:
-    .word   39         # 5*8-1                 # sizeof(gdt) - 1
+    .word   23         # 5*8-1                 # sizeof(gdt) - 1
     .long   gdt                             # address gdt
 
 .p2align 4                              # force 16 byte alignment
