@@ -16,7 +16,6 @@
 
 #define BOTPAK    0X00280000
 #define DSKCAC    0x00100000
-#define DSKCAC0   0X00008000 
 
 
 .globl entry
@@ -171,20 +170,13 @@ ccode:
     movl    $BOTPAK,%edi
     movl    $(512*1024/4),%ecx
     call    memcpy
-bootsector:  
-    # 把bootsector的内容复制到 0x100000的位置  
-    movl    $0x7c00,%esi
-    movl    $DSKCAC,%edi  # DSKCAC=0x00100000 把bootsector的内容复制到0x100000地址处
-    movl    $(512/4),%ecx
-    call    memcpy
 all:
     # 把整个软盘上的内容复制到 0x100000内存地址处
-    movl    $(DSKCAC0+512),%esi
-    movl    $(DSKCAC+512) ,%edi  
+    movl    $0x8000,%esi
+    movl    $(DSKCAC),%edi
     movl    $0,%ecx
     movb    (CYLS),%cl
     imul    $(512*18*2/4),%ecx
-    subl    $(512/4),%ecx
     call    memcpy
   
   

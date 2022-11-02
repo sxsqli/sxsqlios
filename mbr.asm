@@ -38,11 +38,11 @@ entry:
 
 ; 开始读磁盘
 
-		MOV		AX,0x0820		; 16位模式的段寄存器ES
+		MOV		AX,0x0800		; 16位模式的段寄存器ES
 		MOV		ES,AX			; 16位模式的段寄存器ES
 		MOV		CH,0			; 柱面0
 		MOV		DH,0			; 磁头0
-		MOV		CL,2			; 扇区2
+		MOV		CL,1			; 扇区1
 readloop:
 		MOV		SI,0			; 初始化试错计数
 retry:
