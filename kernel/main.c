@@ -18,16 +18,18 @@
 // extern struct KEYBUF keybuf;
 extern struct FIFO8 keyfifo;
 extern struct FIFO8 mousefifo;
+// extern char hankaku[2048];
 
 int test_add(int a, int b);
 
 void _main(void)
 {
-	// clear_screen(15);
-	// io_hlt();
-	extern char hankaku[2048];
-
 	struct BOOTINFO *binfo = (struct BOOTINFO *)ADR_BOOTINFO;
+
+	// clear_screen(binfo->vram, binfo->scrnx * binfo->scrny, 15);
+	// color_screen(binfo->vram, binfo->scrnx * binfo->scrny);
+	// io_hlt();
+
 	char s[40], mcursor[228], background[228];
 	unsigned char keybuf[32], mousebuf[128];
 	int mx = binfo->scrnx / 2, my = binfo->scrny / 2;

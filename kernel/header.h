@@ -2,9 +2,6 @@
 #define header
 #include <x86.h>
 
-// #define io_halt() asm("hlt")
-// #define io_cli() asm("cli")
-// #define io_sti() asm("sti")
 #define write_mem8(addr, data8) ((*(volatile char *)(addr)) = (char)data8)
 
 #define COL8_000000 0
@@ -116,8 +113,8 @@ struct MEMMAN
 	struct FREEINFO free[MEMMAN_FREES];
 };
 
-extern void clear_screen(char color); // color=15 pure white color=40 red
-extern void color_screen(char color);
+extern void clear_screen(char *vram, int size, unsigned char c); // color=15 pure white color=40 red
+extern void color_screen(char *vram, int size);
 
 extern void init_palette(void);
 extern void set_palette(int start, int end, unsigned char *rgb);

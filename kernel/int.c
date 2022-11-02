@@ -103,5 +103,5 @@ int add(int a, int b)
 
 int do_something(int a, int b, int (*p)(int, int))
 {
-	return (*p)(a, b);
+	return p(a, b);
 }

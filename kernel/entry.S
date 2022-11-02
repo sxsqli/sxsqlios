@@ -3,8 +3,6 @@
 # memory at physical address 0x7c00 and starts executing in real mode
 # with %cs=0 %ip=7c00.
 # AT&T格式汇编
-#include <mmu.h>
-
 #define VBEMODE   0x0105
 
 #define CYLS      0x0ff0
@@ -76,13 +74,12 @@ start:
     movl    %es:0x28(%di),%eax
     movl    %eax,(VRAM)
     jmp     keystatus
-    
+
 scrn320:
     # 利用中断int 0x10来改变显示模式
-    movb    $0x13,%al       # vga 320x200x8 位,color mode 
-    movb    $0x00,%ah  
-    int     $0x10   
-    movb    $10,(CYLS)      # save color mode in ram 0x0ff0
+    movb    $0x13,%al       # vga 320x200x8 位,color mode
+    movb    $0x00,%ah
+    int     $0x10
     movb    $8,(VMODE)
     movw    $320,(SCRNX)
     movw    $200,(SCRNY)
@@ -90,13 +87,13 @@ scrn320:
 
 keystatus:
     # get keyboard led status
-    movb    $0x02,%ah 
+    movb    $0x02,%ah
     int     $0x16           # keyboard interrupts
     movb    %al,(LEDS)
     # diplay "my kernel is runing jos"
     movw  $msg,%si
     call  puts
-  
+
 
     # 禁用所有PIC
     movb    $0xff,%al
@@ -108,7 +105,7 @@ keystatus:
     # Enable A20:
     #   For backwards compatibility with the earliest PCs, physical
     #   address line 20 is tied low, so that addresses higher than
-    #   1MB wrap around to zero by default.  This code undoes this. 
+    #   1MB wrap around to zero by default.  This code undoes this.
 seta20.1:
     inb     $0x64,%al               # Wait for not busy
     testb   $0x02,%al               # if 1 :busy ,if 0:idle
@@ -122,20 +119,20 @@ seta20.2:
     jnz     seta20.2
     # 对port 0x60 写0xdf
     movb    $0xdf,%al               # 0xdf -> port 0x60
-    outb    %al,$0x60 
+    outb    %al,$0x60
     # 通过对上面的Port的操作，实现enable A20
     # Switch from real to protected mode, using a bootstrap GDT       this is vip ,but i don`t know it clearly now
-    # and segment translation that makes virtual addresses 
-    # identical to their physical addresses, so that the 
+    # and segment translation that makes virtual addresses
+    # identical to their physical addresses, so that the
     # effective memory map does not change during the switch.
     # movw $msg,%si
     # call puts
-  
+
     lgdt    gdtdesc                # 设定临时GDT
     movl    %cr0,%eax
     andl    $0x7fffffff,%eax       # 设bit31为0（为了禁止颁）
     orl     $0x00000001,%eax       # 设bit0为1（为了切换到保护模式）
-    movl    %eax,%cr0  
+    movl    %eax,%cr0
     # 这个地方非常的重要，一但这条movl %eax,%cr0把cr0的pe位打开后，下面的
     # 代码就是32位的，所以空上ljmp的指令是条过度指令，选择 用的gdt是1*8,
     # 也就是第一个gdt(从0开始的)。
@@ -161,9 +158,9 @@ protcseg:
 
     # Set up the stack pointer and call into C.
     # stack range: 0x00300000 - 0x003fffff
-    movl    $0x3fffff,%esp
-  
-ccode: 
+    movl    $0x400000,%esp
+
+ccode:
     # 把c代码部分复制到其它的memory的地址  1024个扇区的内容
     # memcopy(main,BOTPAK,size=512*1024/4);#BOTPAK =0X00280000
     movl    $main,%esi
@@ -178,19 +175,19 @@ all:
     movb    (CYLS),%cl
     imul    $(512*18*2/4),%ecx
     call    memcpy
-  
-  
-  # 下面的这部分不明白，先不管了   这 一部分还真有可能是bootpack的头文件
-  # movl $BOTPAK ,%ebx  ；ebx=0x280000
-  # movl 16(%ebx),%ecx    ecx= int (*0x280010) 跳过16个字节
-  # addl  $3     ,%ecx    ecx=ecx+3
-  # shr   $2     ,%ecx    ecx=ecx/4   ecx中放的是c部分代码的大小
-  # jz   skip
-  # movl 20(%ebx),%esi
-  # addl %ebx    ,%esi
-  # movl 12(%ebx),%edi
-  # call memcpy  
-  
+
+
+# 下面的这部分不明白，先不管了   这 一部分还真有可能是bootpack的头文件
+# movl $BOTPAK ,%ebx  ；ebx=0x280000
+# movl 16(%ebx),%ecx    ecx= int (*0x280010) 跳过16个字节
+# addl  $3     ,%ecx    ecx=ecx+3
+# shr   $2     ,%ecx    ecx=ecx/4   ecx中放的是c部分代码的大小
+# jz   skip
+# movl 20(%ebx),%esi
+# addl %ebx    ,%esi
+# movl 12(%ebx),%edi
+# call memcpy
+
 #    movw    $(3*8),%ax
 #    movw    %ax,%ds
     ljmp    $(2*8),$0x00280000
@@ -212,7 +209,7 @@ gdt:
     .word   0xffff,0x0000,0x9200,0x00cf  # data selector 1
     .word   0xffff,0x0000,0x9a00,0x00cf  # c code        2
     .word   0x00
-  
+
 gdtdesc:
     .word   23         # 5*8-1                 # sizeof(gdt) - 1
     .long   gdt                             # address gdt
