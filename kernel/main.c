@@ -21,7 +21,7 @@ extern struct FIFO8 mousefifo;
 
 int test_add(int a, int b);
 
-void bootmain(void)
+void _main(void)
 {
 	// clear_screen(15);
 	// io_hlt();
@@ -72,7 +72,7 @@ void bootmain(void)
 	sprintf(s, "memory %dMB free: %dKB", memtotal / (1024 * 1024), memman_total(memman) / 1024);
 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 32, COL8_FFFFFF, s);
 
-	sprintf(s, "bootmain: %x,add: %x", bootmain, add);
+	sprintf(s, "_main: %x, add: %x, test_add: %x", _main, add, test_add);
 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 48, COL8_FFFFFF, s);
 
 	sprintf(s, "1+2=%d,do(1+2)=%d", add(1, 2), do_something(1, 2, add));

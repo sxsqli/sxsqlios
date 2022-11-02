@@ -7,11 +7,11 @@ mbr:mbr.asm
 
 img:mbr
 	dd if=mbr of=sxsqlios.img count=1 bs=512
-	dd if=/dev/zero of=sxsqlios.img bs=512 seek=1 skip=1 count=2879
+	dd if=/dev/zero of=sxsqlios.img bs=512 seek=1 count=2879
 
 .PHONY: kernel
 kernel:
-	cd $(kernel_dir) && make clean && make $@
+	make -C $(kernel_dir) $@
 
 copy:img kernel
 	mkdir -p /tmp/floppy
@@ -25,5 +25,5 @@ run:copy
 clean:
 	@echo "cleanning project"
 	-rm -f mbr *.bin
-	cd $(kernel_dir) && make clean
+	make -C $(kernel_dir) clean
 	@echo "clean completed"

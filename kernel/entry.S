@@ -166,7 +166,7 @@ protcseg:
   
 ccode: 
     # 把c代码部分复制到其它的memory的地址  1024个扇区的内容
-    # memcopy(bootmain,BOTPAK,size=512*1024/4);#BOTPAK =0X00280000
+    # memcopy(main,BOTPAK,size=512*1024/4);#BOTPAK =0X00280000
     movl    $main,%esi
     movl    $BOTPAK,%edi
     movl    $(512*1024/4),%ecx

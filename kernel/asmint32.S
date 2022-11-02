@@ -1,6 +1,6 @@
 .global asm_inthandler21
 .global asm_inthandler2c
-.global load_gdtr 
+.global load_gdtr
 .global load_idtr
 
 .code32
@@ -14,7 +14,7 @@ asm_inthandler21:
   movw %ax,%ds
   movw %ax,%es
   call inthandler21
-  
+
   popl %eax
   popal
   popw %ds
