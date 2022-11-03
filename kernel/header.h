@@ -1,5 +1,5 @@
-#ifndef header
-#define header
+#ifndef HEADER
+#define HEADER
 #include <x86.h>
 
 #define write_mem8(addr, data8) ((*(volatile char *)(addr)) = (char)data8)
@@ -62,64 +62,57 @@
 #define MEMMAN_FREES 4090
 #define MEMMAN_ADDR 0x003c0000
 
-struct BOOTINFO
-{
-	char cyls, leds, vmode, reserve;
-	short scrnx, scrny;
-	char *vram;
-};
+typedef struct BOOTINFO {
+  char cyls, leds, vmode, reserve;
+  short scrnx, scrny;
+  char *vram;
+} BOOTINFO;
 
-struct SEGMENT_DESCRIPTOR
-{
-	short limit_low, base_low;
-	char base_mid, access_right;
-	char limit_high, base_high;
-};
+typedef struct SEGMENT_DESCRIPTOR {
+  short limit_low, base_low;
+  char base_mid, access_right;
+  char limit_high, base_high;
+} SEGMENT_DESCRIPTOR;
 
-struct GATE_DESCRIPTOR
-{
-	short offset_low, selector;
+typedef struct GATE_DESCRIPTOR {
+  short offset_low, selector;
+  char dw_count, access_right;
+  short offset_high;
+} GATE_DESCRIPTOR;
 
-	char dw_count, access_right;
-	short offset_high;
-};
+typedef struct KEYBUF {
+  unsigned char data[32];
+  int next_r, next_w, len;
+} KEYBUF;
 
-struct KEYBUF
-{
-	unsigned char data[32];
-	int next_r, next_w, len;
-};
+typedef struct FIFO8 {
+  unsigned char *buf;
+  int p, q, size, free, flags;
+} FIFO8;
 
-struct FIFO8
-{
-	unsigned char *buf;
-	int p, q, size, free, flags;
-};
+typedef struct MOUSE_DEC {
+  unsigned char buf[3], phase;
+  int x, y, btn;
+} MOUSE_DEC;
 
-struct MOUSE_DEC
-{
-	unsigned char buf[3], phase;
-	int x, y, btn;
-};
+typedef struct FREEINFO {
+  unsigned int addr, size;
+} FREEINFO;
 
-struct FREEINFO
-{
-	unsigned int addr, size;
-};
+typedef struct MEMMAN {
+  int frees, maxfrees, lostsize, losts;
+  FREEINFO free[MEMMAN_FREES];
+} MEMMAN;
 
-struct MEMMAN
-{
-	int frees, maxfrees, lostsize, losts;
-	struct FREEINFO free[MEMMAN_FREES];
-};
-
-extern void clear_screen(char *vram, int size, unsigned char c); // color=15 pure white color=40 red
+extern void clear_screen(char *vram, int size,
+                         unsigned char c);  // color=15 pure white color=40 red
 extern void color_screen(char *vram, int size);
 
 extern void init_palette(void);
 extern void set_palette(int start, int end, unsigned char *rgb);
 
-extern void boxfill8(char *vram, int xsize, unsigned char c, int x0, int y0, int x1, int y1);
+extern void boxfill8(char *vram, int xsize, unsigned char c, int x0, int y0,
+                     int x1, int y1);
 extern void init_screen8(char *vram, int x, int y);
 extern void putfont8(char *vram, int xsize, int x, int y, char c, char *font);
 extern void putfonts8_asc(char *vram, int xsize, int x, int y, char c, char *s);
@@ -128,11 +121,14 @@ extern void printdebug(int i, int x);
 extern void itoa(int value, char *buf);
 extern void sprintf(char *str, char *format, ...);
 extern void init_mouse_cursor8(char *mouse, char bg);
-extern void putblock8_8(char *vram, int xsize, int pxsize, int pysize, int px0, int py0, char *buf, int bxsize); //显示鼠标,display_mouse
+extern void putblock8_8(char *vram, int xsize, int pxsize, int pysize, int px0,
+                        int py0, char *buf,
+                        int bxsize);  // 显示鼠标,display_mouse
 
 extern void init_gdtidt(void);
-extern void set_segmdesc(struct SEGMENT_DESCRIPTOR *sd, unsigned int limit, int base, int ar);
-extern void set_gatedesc(struct GATE_DESCRIPTOR *gd, int offset, int selector, int ar);
+extern void set_segmdesc(SEGMENT_DESCRIPTOR *sd, unsigned int limit, int base,
+                         int ar);
+extern void set_gatedesc(GATE_DESCRIPTOR *gd, int offset, int selector, int ar);
 
 extern void init_pic(void);
 extern void inthandler21(int *esp);
@@ -143,26 +139,26 @@ extern void asm_inthandler21();
 extern void asm_inthandler2c();
 extern void xtoa(unsigned int value, char *buf);
 
-extern void fifo8_init(struct FIFO8 *fifo, int size, unsigned char *buf);
-extern int fifo8_put(struct FIFO8 *fifo, char data);
-extern int fifo8_get(struct FIFO8 *fifo);
-extern int fifo8_status(struct FIFO8 *fifo);
+extern void fifo8_init(FIFO8 *fifo, int size, unsigned char *buf);
+extern int fifo8_put(FIFO8 *fifo, char data);
+extern int fifo8_get(FIFO8 *fifo);
+extern int fifo8_status(FIFO8 *fifo);
 
 extern void wait_KBC_sendready(void);
 extern void init_keyboard(void);
-extern void enable_mouse(struct MOUSE_DEC *mdec);
-extern int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat);
+extern void enable_mouse(MOUSE_DEC *mdec);
+extern int mouse_decode(MOUSE_DEC *mdec, unsigned char dat);
 extern void inthandler2c(int *esp);
 
 extern unsigned int memtest(unsigned int start, unsigned int end);
 extern unsigned int memtest_sub(unsigned int start, unsigned int end);
 
-extern void memman_init(struct MEMMAN *man);
-extern unsigned int memman_total(struct MEMMAN *man);
-extern unsigned int memman_alloc(struct MEMMAN *man, unsigned int size);
-extern int memman_free(struct MEMMAN *man, unsigned int addr, unsigned int size);
+extern void memman_init(MEMMAN *man);
+extern unsigned int memman_total(MEMMAN *man);
+extern unsigned int memman_alloc(MEMMAN *man, unsigned int size);
+extern int memman_free(MEMMAN *man, unsigned int addr, unsigned int size);
 
 extern int add(int a, int b);
 extern int do_something(int a, int b, int (*p)(int, int));
 
-#endif
+#endif  // HEADER

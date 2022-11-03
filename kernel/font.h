@@ -1,21 +1,7 @@
-/*
- * ==================================================
- *
- *       Filename:  font.h
- *
- *    Description:  
- *
- *        Version:  0.01
- *        Created:  2014年03月02日 星期日 12时27分31秒
- *         Author:  ChrisZZ, zchrissirhcz@163.com
- *        Company:  ZJUT
- *
- * ==================================================
- */
-#ifndef font_header
-#define font_header
+#ifndef FONT_H
+#define FONT_H
 
-extern unsigned short ASCII_Table[];
-extern char hankaku[2048];
+extern const unsigned short font_16_24[];
+extern const char font_8_16[];
 
-#endif
+#endif  // FONT_H

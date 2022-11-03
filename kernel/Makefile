@@ -6,7 +6,7 @@ OBJDUMP	= objdump
 
 OBJDIR = .
 entry_objs = entry.o
-ccode_objs = main.o screen.o font.o print.o idtgdt.o int.o asmint32.o fifo.o mouse.o memory.o
+ccode_objs = main.o screen.o print.o idtgdt.o int.o asmint32.o fifo.o mouse.o memory.o fontascii.o
 
 CFLAGS := $(CFLAGS) -I$(OBJDIR) -O0 -MD -m32 -ggdb
 CFLAGS += -nostdinc -fno-builtin -fno-omit-frame-pointer -fno-stack-protector
