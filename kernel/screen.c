@@ -36,7 +36,7 @@ void set_palette(int start, int end, unsigned char *rgb) {
 
 void init_palette(void) {
   // 16种color，每个color三个字节。
-  static unsigned char table_rgb[16 * 3] = {
+  const unsigned char table_rgb[16 * 3] = {
       0x00, 0x00, 0x00, /*0:black*/
       0xff, 0x00, 0x00, /*1:light red*/
       0x00, 0xff, 0x00, /*2:light green*/
