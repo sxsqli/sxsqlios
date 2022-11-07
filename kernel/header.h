@@ -1,6 +1,6 @@
 #ifndef HEADER
 #define HEADER
-#include <x86.h>
+// #include <x86.h>
 
 #define write_mem8(addr, data8) ((*(volatile char *)(addr)) = (char)data8)
 
@@ -132,11 +132,25 @@ extern void set_gatedesc(GATE_DESCRIPTOR *gd, int offset, int selector, int ar);
 
 extern void init_pic(void);
 extern void inthandler21(int *esp);
-extern void load_gdtr(int limit, int addr);
-extern void load_idtr(int limit, int addr);
 
 extern void asm_inthandler21();
 extern void asm_inthandler2c();
+extern void load_gdtr(int limit, int addr);
+extern void load_idtr(int limit, int addr);
+extern void io_hlt();
+extern void io_cli();
+extern void io_sti();
+extern int io_in8(int port);
+extern int io_in16(int port);
+extern int io_in32(int port);
+extern void io_out8(int port, int data);
+extern void io_out16(int port, int data);
+extern void io_out32(int port, int data);
+extern int io_load_eflags();
+extern void io_store_eflags(int eflags);
+extern int load_cr0();
+extern void store_cr0(int cr0);
+
 extern void xtoa(unsigned int value, char *buf);
 
 extern void fifo8_init(FIFO8 *fifo, int size, unsigned char *buf);

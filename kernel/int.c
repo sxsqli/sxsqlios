@@ -5,21 +5,21 @@ struct FIFO8 keyfifo;
 struct FIFO8 mousefifo;
 
 void init_pic(void) {
-  outb(PIC0_IMR, 0xff);
-  outb(PIC1_IMR, 0xff);
+  io_out8(PIC0_IMR, 0xff);
+  io_out8(PIC1_IMR, 0xff);
 
-  outb(PIC0_ICW1, 0x11);
-  outb(PIC0_ICW2, 0x20);
-  outb(PIC0_ICW3, 1 << 2);
-  outb(PIC0_ICW4, 0x01);
+  io_out8(PIC0_ICW1, 0x11);
+  io_out8(PIC0_ICW2, 0x20);
+  io_out8(PIC0_ICW3, 1 << 2);
+  io_out8(PIC0_ICW4, 0x01);
 
-  outb(PIC1_ICW1, 0x11);
-  outb(PIC1_ICW2, 0x28);
-  outb(PIC1_ICW3, 2);
-  outb(PIC1_ICW4, 0x01);
+  io_out8(PIC1_ICW1, 0x11);
+  io_out8(PIC1_ICW2, 0x28);
+  io_out8(PIC1_ICW3, 2);
+  io_out8(PIC1_ICW4, 0x01);
 
-  outb(PIC0_IMR, 0xfb);
-  outb(PIC1_IMR, 0xff);
+  io_out8(PIC0_IMR, 0xfb);
+  io_out8(PIC1_IMR, 0xff);
 
   return;
 }
@@ -30,8 +30,8 @@ void inthandler21(int *esp) {
   ///	boxfill8(binfo->vram, binfo->scrnx, COL8_000084, 0, 16, 31, 31);
   unsigned char data;
   ////char s[4];
-  outb(PIC0_OCW2, 0x61);
-  data = inb(PORT_KEYDAT);
+  io_out8(PIC0_OCW2, 0x61);
+  data = io_in8(PORT_KEYDAT);
   /*
   if(keybuf.len<32){
           keybuf.data[keybuf.next_w] = data;
@@ -52,8 +52,8 @@ void inthandler21(int *esp) {
 /*
 void inthandler21(int *esp){
         char data;
-        outb(PIC0_OCW2, 0x61);
-        data = inb(PORT_KEYDAT);
+        io_out8(PIC0_OCW2, 0x61);
+        data = io_in8(PORT_KEYDAT);
         if(keybuf.next<32){
                 keybuf.data[keybuf.next] = data;
                 keybuf.next++;
@@ -64,8 +64,8 @@ void inthandler21(int *esp){
 /*
 void inthandler21(int *esp){
         char data;
-        outb(PIC0_OCW2, 0x61);
-        data = inb(PORT_KEYDAT);
+        io_out8(PIC0_OCW2, 0x61);
+        data = io_in8(PORT_KEYDAT);
         if(keybuf.len < 32){
                 keybuf.data[keybuf.next_w] = data;
                 keybuf.len++;
@@ -79,9 +79,9 @@ void inthandler21(int *esp){
 */
 void inthandler2c(int *esp) {
   unsigned char data;
-  outb(PIC1_OCW2, 0x64);
-  outb(PIC0_OCW2, 0X62);
-  data = inb(PORT_KEYDAT);
+  io_out8(PIC1_OCW2, 0x64);
+  io_out8(PIC0_OCW2, 0X62);
+  data = io_in8(PORT_KEYDAT);
   fifo8_put(&mousefifo, data);
   return;
   /*

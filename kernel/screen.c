@@ -23,11 +23,11 @@ void set_palette(int start, int end, unsigned char *rgb) {
   int i, eflags;
   eflags = io_load_eflags();  // 替代作者的io_load_eflags()
   io_cli();
-  outb(0x03c8, start);  // 替代作者的io_out8()
+  io_out8(0x03c8, start);  // 替代作者的io_out8()
   for (i = start; i <= end; i++) {
-    outb(0x03c9, rgb[0] / 4);
-    outb(0x03c9, rgb[1] / 4);
-    outb(0x03c9, rgb[2] / 4);
+    io_out8(0x03c9, rgb[0] / 4);
+    io_out8(0x03c9, rgb[1] / 4);
+    io_out8(0x03c9, rgb[2] / 4);
     rgb += 3;
   }
   io_store_eflags(eflags);  // 替代作者的io_store_eflags(eflags)
@@ -137,14 +137,14 @@ void putfont8(char *vram, int xsize, int x, int y, char c, char *font) {
 void putfonts8_asc(char *vram, int xsize, int x, int y, char c, char *s) {
   // 其实这就是一个简易版本的printf
   for (; *s != 0x00; s++) {
-    putfont8(vram, xsize, x, y, c, font_8_16 + *s * 16);
+    putfont8(vram, xsize, x, y, c, (char *)(font_8_16 + (*s) * 16));
     x += 8;
   }
   return;
 }
 
 void init_mouse_cursor8(char *mouse, char bg) {
-  const static char cursor[19][12] = {
+  const char cursor[19][12] = {
       "*...........", "**..........", "*O*.........", "*OO*........",
       "*OOO*.......", "*OOOO*......", "*OOOOO*.....", "*OOOOOO*....",
       "*OOOOOOO*...", "*OOOOOOOO*..", "*OOOOOOOOO*.", "*OOOOOOOOOO*",

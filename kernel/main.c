@@ -40,8 +40,8 @@ void _main(void) {
   putblock8_8(binfo->vram, binfo->scrnx, 12, 19, mx, my, mcursor, 12);
 
   io_sti();  // 开启cpu级别中断
-  outb(PIC0_IMR, 0xf9);  // 11111001 PIC0开启1号、2号，1号对应键盘，2号对应PIC1
-  outb(PIC1_IMR, 0xef);  // 11101111 PIC1开启4号，对应IRQ12鼠标中断
+  io_out8(PIC0_IMR, 0xf9);  // 11111001 PIC0开启1号、2号，1号对应键盘，2号对应PIC1
+  io_out8(PIC1_IMR, 0xef);  // 11101111 PIC1开启4号，对应IRQ12鼠标中断
   init_keyboard();
   enable_mouse(&mdec);
 
